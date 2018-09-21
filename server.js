@@ -53,7 +53,7 @@ app.get("/", function(req, res) {
     res.render("index");
 })
 
-app.get("/scrape", function(req, res) {
+app.get("/", function(req, res) {
 
     request("https://www.npr.org/series/tiny-desk-concerts/", function(error, response, html) {
 
