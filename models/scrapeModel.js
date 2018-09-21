@@ -9,7 +9,8 @@ var scrapeSchema = new Schema({
     },
     link: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     summary: {
         type: String,
