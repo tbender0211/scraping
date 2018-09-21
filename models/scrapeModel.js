@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 
 var Schema = mongoose.Schema;
 
-var schema = new Schema({
+var scrapeSchema = new Schema({
     title: {
         type: String,
         required: true
@@ -14,9 +14,13 @@ var schema = new Schema({
     summary: {
         type: String,
         required: true
+    },
+    saved: {
+        type: Boolean,
+        default: false
     }
 });
 
-var Scrape = mongoose.model("Scrape", schema);
+var Scrape = mongoose.model("Scrape", scrapeSchema);
 
 module.exports = Scrape;

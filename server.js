@@ -3,11 +3,26 @@ var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 var request = require("request");
 var cheerio = require("cheerio");
+var logger = require("morgan");
 
-var PORT = 3000;
+var PORT = process.env.PORT || 3000;
 var app = express();
 
-app.use(express.static("public"));
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/scraper";
+
+mongoose.Promise = Promise;
+mongoose.connect(MONGODB_URI, {
+  useNewUrlParser: true
+});
+
+var db = mongoose.connection;
+
+//Log request using morgan
+app.use(logger("dev"));
+//bodyparser for handling form submissions
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 
 app.use(express.static("public"));
 
@@ -21,12 +36,24 @@ app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 var routes = require("./routes/htmlRoutes");
+var Scrape = require("./models/scrapeModel");
 
 app.use(routes);
 
-mongoose.connect("mongodb://localhost/scraping", {useNewUrlParser: true});
+db.on("error", function (error) {
+    console.log("Mongoose Error: ", error);
+  });
+  
+// Log a Mongoose success message
+db.once("open", function () {
+    console.log("Mongoose connection was successful.");
+  });
 
-app.post("/", function(req, res) {
+app.get("/", function(req, res) {
+    res.render("index");
+})
+
+app.get("/scrape", function(req, res) {
 
     request("https://www.npr.org/series/tiny-desk-concerts/", function(error, response, html) {
 
@@ -34,28 +61,34 @@ app.post("/", function(req, res) {
 
         $(".info").each(function(i, element) {
 
-            var title = $(element).find(".title").children("a").text();
-            var link = $(element).find(".title").children("a").attr("href");
-            var summary = $(element).children(".teaser").text();
+            var data = {};
 
-            if (title && link) {
+            data.title = $(element).find(".title").children("a").text();
+            data.link = $(element).find(".title").children("a").attr("href");
+            data.summary = $(element).children("p.teaser").text();
 
-                var data = {
-                    title: title,
-                    link: link,
-                    summary: summary
-                };
-
-                Scrape.create(data)
-                    .then(function(scrapedData){
-                        console.log(scrapedData);
-                    })
-                    .catch(function(err) {
-                        console.log(err.message);
-                    });
-            }
+            new Scrape(data).save(function(err, data) {
+                if (err) {
+                    console.log(err);
+                }
+                else {
+                    console.log(data);
+                }
+            });
         });
+        res.send("Scrape Complete");
     });  
+});
+
+app.get("/sessions", function (req,res) {
+    Scrape.find({}).limit(15).exec(function(err, data) {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            res.json(data);
+        }
+    });
 });
 
 app.listen(PORT, function() {
