@@ -1,3 +1,4 @@
+//All the npm requirements
 var express = require("express");
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
@@ -26,21 +27,24 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 
+
 app.use(express.static("public"));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-
+//Handlebars stuff
 var exphbs = require("express-handlebars");
-
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
+//HTML routes
 var routes = require("./routes/htmlRoutes");
+app.use(routes);
+
+//Scrape model
 var Scrape = require("./models/scrapeModel");
 
-app.use(routes);
 
 db.on("error", function (error) {
     console.log("Mongoose Error: ", error);
@@ -57,7 +61,7 @@ app.get("/", function(req, res) {
     res.render("index");
 });
 
-app.get("/", function(req, res) {
+app.get("/scrape", function(req, res) {
 
     request("https://www.npr.org/series/tiny-desk-concerts/", function(error, response, html) {
 
@@ -81,6 +85,7 @@ app.get("/", function(req, res) {
             });
         });
         res.send("Scrape Complete");
+        res.render("index");
     });  
 });
 
@@ -96,7 +101,7 @@ app.get("/sessions", function (req,res) {
 });
 
 app.get("/saved", function (req, res) {
-    Scrape.find({"saved": true}).exec(function(err, data) {
+    Scrape.find({"saved": true}).populate("saved").exec(function(err, data) {
         if (err) {
             console.log(err);
         }
@@ -120,12 +125,13 @@ app.post("/scrapes/save/:id", function (req, res) {
         else {
           // Or send the document to the browser
           res.send(doc);
+          console.log(doc);
         }
       });
   });
 
 app.post("/clear", function (req,res) {
-    Scrape.find({saved: false}).remove()
+    Scrape.find({}).remove()
         .exec(function (err, doc) {
             if (err) {
                 console.log(err);
@@ -137,6 +143,8 @@ app.post("/clear", function (req,res) {
         })
 })
 
+
+//Start the app locally
 app.listen(PORT, function() {
     console.log("App running on port " + PORT + ".");
 });

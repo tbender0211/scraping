@@ -18,3 +18,13 @@ $("#clear").on("click", function () {
         window.location = "/";
     })
 });
+
+$("#scrape").on("click", function() {
+    $.ajax({
+        method: "GET",
+        url: "/scrape"
+    }).done(function(data) {
+        console.log(data);
+        window.location = "/";
+    })
+});

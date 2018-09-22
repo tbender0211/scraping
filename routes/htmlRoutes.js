@@ -9,7 +9,9 @@ router.get("/", function(req, res) {
 });
 
 router.get("/saved", function(req, res) {
-    res.render("saved");
+    Scrape.find({saved: true}, function(err, data) {
+        res.render("saved", {scrape: data});
+    });
 });
 
 module.exports = router;
