@@ -7,3 +7,13 @@ $("#save").on("click", function () {
         window.location = "/saved"
     })
 });
+
+$("#clear").on("click", function () {
+    $.ajax({
+        method: "GET",
+        url: "/clear"
+    }).done(function (data) {
+        console.log(data);
+        window.location = "/";
+    })
+});

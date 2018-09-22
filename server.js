@@ -108,7 +108,7 @@ app.get("/saved", function (req, res) {
 //Post routes
 app.post("/scrapes/save/:id", function (req, res) {
     // Find and update the articles boolean by ID
-    Scrape.findOneAndUpdate({ "_id": req.params.id }, { "saved": true })
+    Scrape.findOneAndUpdate({ _id: req.params.id }, { saved: true })
       // Execute the query
       .exec(function (err, doc) {
         // Log any errors
@@ -121,6 +121,19 @@ app.post("/scrapes/save/:id", function (req, res) {
         }
       });
   });
+
+app.post("/clear", function (req,res) {
+    Scrape.find({saved: true}).remove()
+        .exec(function (err, doc) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                console.log(doc);
+                res.render("index");
+            }
+        })
+})
 
 app.listen(PORT, function() {
     console.log("App running on port " + PORT + ".");
