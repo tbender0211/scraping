@@ -19,6 +19,7 @@
         <nav>
             <div class="nav-wrapper">
                 <a href="/" class="brand-logo"><i class="material-icons left">headset</i>Tiny Desk Scrape</a>
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                 <ul class="right hide-on-med-and-down">
                     <li><a href="/"><i class="material-icons left" id="scrape">autorenew</i>Scrape</a></li>
                     <li><a href="/"><i class="material-icons left" id="clear">clear</i>Clear All</a></li>
@@ -26,6 +27,12 @@
                 </ul>
             </div>
         </nav>
+
+        <ul class="sidenav" id="mobile-demo">
+            <li><a href="/"><i class="material-icons left" id="scrape">autorenew</i>Scrape</a></li>
+            <li><a href="/"><i class="material-icons left" id="clear">clear</i>Clear All</a></li>
+            <li><a href="/saved"><i class="material-icons left">favorite_border</i>Saved</a></li>
+        </ul>
 
         {{{body}}}
 

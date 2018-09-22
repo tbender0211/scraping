@@ -1,3 +1,5 @@
+$(document).ready(function(){
+    
 $("#save").on("click", function () {
     var thisId = $(this).attr("data-id");
     console.log(thisId);
@@ -27,4 +29,8 @@ $("#scrape").on("click", function() {
         console.log(data);
         window.location = "/";
     })
+});
+
+$('.sidenav').sidenav();
+
 });
