@@ -130,6 +130,20 @@ app.post("/scrapes/save/:id", function (req, res) {
       });
   });
 
+app.post("/scrapes/unsave/:id", function (req, res) {
+
+    Scrape.findOneAndUpdate({_id: req.params.id}, {saved: false})
+        .exec(function (err, doc) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                res.send(doc);
+                console.log(doc);
+            }
+    });
+});
+
 app.post("/clear", function (req,res) {
     Scrape.find({}).remove()
         .exec(function (err, doc) {
