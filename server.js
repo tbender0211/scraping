@@ -106,7 +106,7 @@ app.get("/saved", function (req, res) {
 });
 
 //Post routes
-app.post("/articles/save/:id", function (req, res) {
+app.post("/scrapes/save/:id", function (req, res) {
     // Find and update the articles boolean by ID
     Scrape.findOneAndUpdate({ "_id": req.params.id }, { "saved": true })
       // Execute the query
