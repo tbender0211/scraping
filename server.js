@@ -42,8 +42,9 @@ app.set("view engine", "handlebars");
 var routes = require("./routes/htmlRoutes");
 app.use(routes);
 
-//Scrape model
+//All the models
 var Scrape = require("./models/scrapeModel");
+var Comment = require("./models/commentModel");
 
 
 db.on("error", function (error) {
