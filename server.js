@@ -8,14 +8,16 @@ var logger = require("morgan");
 var PORT = process.env.PORT || 3000;
 var app = express();
 
+//The Mongoose stuff
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/scraper";
-
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true
 });
-
+mongoose.set("useFindAndModify", false);
+mongoose.set("useCreateIndex", true);
 var db = mongoose.connection;
+
 
 //Log request using morgan
 app.use(logger("dev"));
@@ -123,7 +125,7 @@ app.post("/scrapes/save/:id", function (req, res) {
   });
 
 app.post("/clear", function (req,res) {
-    Scrape.find({saved: true}).remove()
+    Scrape.find({saved: false}).remove()
         .exec(function (err, doc) {
             if (err) {
                 console.log(err);

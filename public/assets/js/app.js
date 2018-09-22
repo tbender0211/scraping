@@ -1,5 +1,6 @@
 $("#save").on("click", function () {
     var thisId = $(this).attr("data-id");
+    console.log(thisId);
     $.ajax({
         method: "POST",
         url: "/scrapes/save/" + thisId
