@@ -49,9 +49,11 @@ db.once("open", function () {
     console.log("Mongoose connection was successful.");
   });
 
+
+//Get routes
 app.get("/", function(req, res) {
     res.render("index");
-})
+});
 
 app.get("/", function(req, res) {
 
@@ -90,6 +92,35 @@ app.get("/sessions", function (req,res) {
         }
     });
 });
+
+app.get("/saved", function (req, res) {
+    Scrape.find({"saved": true}).exec(function(err, data) {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            console.log(data);
+            res.render("saved");
+        }
+    })
+});
+
+//Post routes
+app.post("/articles/save/:id", function (req, res) {
+    // Find and update the articles boolean by ID
+    Scrape.findOneAndUpdate({ "_id": req.params.id }, { "saved": true })
+      // Execute the query
+      .exec(function (err, doc) {
+        // Log any errors
+        if (err) {
+          console.log(err);
+        }
+        else {
+          // Or send the document to the browser
+          res.send(doc);
+        }
+      });
+  });
 
 app.listen(PORT, function() {
     console.log("App running on port " + PORT + ".");
