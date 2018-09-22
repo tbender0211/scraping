@@ -52,6 +52,19 @@ $("#scrape").on("click", function() {
 
 });
 
+$(".comment").on("click", function(){
+
+    var thisId = $(this).attr("data-id");
+
+    $.ajax({
+        method: "POST",
+        url: "/comment/" + thisId
+    }).done(function(data) {
+        console.log(data);
+        window.location = "/";
+    })
+})
+
 $('.sidenav').sidenav();
 
 });
