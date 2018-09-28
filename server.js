@@ -114,6 +114,18 @@ app.get("/saved", function (req, res) {
     })
 });
 
+app.get("/comments/:id", function (req, res) {
+    Scrape.find({_id: req.params.id}).populate("scrape").exec(function(err, data) {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            console.log(data);
+            res.render("scrape");
+        }
+    });
+});
+
 //Post routes
 app.post("/scrapes/save/:id", function (req, res) {
     // Find and update the articles boolean by ID
@@ -146,20 +158,20 @@ app.post("/scrapes/unsave/:id", function (req, res) {
     });
 });
 
-app.post("/scrapes/comment/:id", function (req, res) {
+app.post("/comments/:id", function (req, res) {
     var newComment = new Comment({
         comment: req.body.text,
         user: req.body.user,
         scrape: req.params.id
     });
-    console.log(req.body);
+    console.log(res);
 
     newComment.save(function (err, comment) {
         if (err) {
             console.log(err);
         }
         else {
-            Scrape.findOneAndUpdate({_id: req.params.id}, {$push: {comment: comment} })
+            Scrape.findOneAndUpdate({_id: req.params.id}, {$push: {comments: comment} })
             .exec(function (err) {
                 if (err) {
                     console.log(err);

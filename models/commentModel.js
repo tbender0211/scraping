@@ -12,10 +12,6 @@ var commentSchema = new Schema({
         type: String,
         required: true
     },
-    date: {
-        type: Date,
-        default: Date.now
-    },
     scrape: {
         type: Schema.Types.ObjectId,
         ref: "Scrape"

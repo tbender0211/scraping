@@ -58,7 +58,7 @@ $(".submit").on("click", function() {
 
     $.ajax({
         method: "POST",
-        url: "/scrapes/comment/" + thisId,
+        url: "/comments/" + thisId,
         data: {
             text: $("#commentText" + thisId).val(),
             user: $(".username" + thisId).val()

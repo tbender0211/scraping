@@ -6,10 +6,9 @@
                 <div class="card-content white-text">
                 <span class="card-title">{{this.title}}</span>
                 <p>{{this.summary}}</p>
-                {{#if this.comment}}
-                    {{#each this.comment}}
-                        <p>{{this.username}}</p>
-                        <p>{{this.date}}</p>
+                {{#if this.comments}}
+                    {{#each this.comments}}
+                        <p>{{this.user}}</p>
                         <p>{{this.comment}}</p>
                     {{/each}}
                 {{/if}}
@@ -43,7 +42,7 @@
                             </div>
                         </div>
                         <div class="card-action">
-                            <a href="#" data-id="{{this._id}}" class="submit">Submit</a>
+                            <a href="/comments/{{this._id}}" data-id="{{this._id}}" class="submit">Submit</a>
                         </div>
                     </div>
                 </div>
