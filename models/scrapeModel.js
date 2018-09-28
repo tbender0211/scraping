@@ -1,4 +1,5 @@
 var mongoose = require("mongoose");
+var Comment = require("./commentModel")
 
 var Schema = mongoose.Schema;
 
@@ -19,7 +20,11 @@ var scrapeSchema = new Schema({
     saved: {
         type: Boolean,
         default: false
-    }
+    },
+    comments: [{
+        type: Schema.Types.ObjectId,
+        ref: "Comment"
+    }]
 });
 
 var Scrape = mongoose.model("Scrape", scrapeSchema);

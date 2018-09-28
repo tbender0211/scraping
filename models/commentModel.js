@@ -1,4 +1,5 @@
 var mongoose = require("mongoose");
+var Scrape = require("./scrapeModel");
 
 var Schema = mongoose.Schema;
 
@@ -14,6 +15,10 @@ var commentSchema = new Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    scrape: {
+        type: Schema.Types.ObjectId,
+        ref: "Scrape"
     }
 })
 

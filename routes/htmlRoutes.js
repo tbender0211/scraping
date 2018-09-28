@@ -5,7 +5,7 @@ var Scrape = require("../models/scrapeModel");
 router.get("/", function(req, res) {
     Scrape.find(function(err, data) {
         res.render("index", {scrape: data});
-    })
+    });
 });
 
 router.get("/saved", function(req, res) {
@@ -17,7 +17,13 @@ router.get("/saved", function(req, res) {
 router.get("/comments/:id", function (req, res) {
     Scrape.find({_id: req.params.id},function(err,data) {
         res.render("scrape", {scrape: data})
-    })
+    });
+});
+
+router.get("/clear", function (req,res) {
+    Scrape.find({}, function(err, data) {
+        res.render("index", {scrape: data});
+    });
 });
 
 module.exports = router;

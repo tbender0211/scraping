@@ -43,7 +43,7 @@ $("#clear").on("click", function () {
 $("#scrape").on("click", function() {
 
     $.ajax({
-        method: "GET",
+        method: "POST",
         url: "/scrape"
     }).done(function(data) {
         console.log(data);
@@ -52,18 +52,23 @@ $("#scrape").on("click", function() {
 
 });
 
-$(".comment").on("click", function(){
+$(".submit").on("click", function() {
 
     var thisId = $(this).attr("data-id");
 
     $.ajax({
         method: "POST",
-        url: "/comment/" + thisId
+        url: "/scrapes/comment/" + thisId,
+        data: {
+            text: $("#commentText" + thisId).val(),
+            user: $(".username" + thisId).val()
+        }
     }).done(function(data) {
         console.log(data);
-        window.location = "/";
+        window.location.reload(true);
     })
-})
+
+});
 
 $('.sidenav').sidenav();
 

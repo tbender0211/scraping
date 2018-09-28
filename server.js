@@ -82,11 +82,12 @@ app.get("/scrape", function(req, res) {
                 }
                 else {
                     console.log(data);
+                    
                 }
             });
         });
         res.send("Scrape Complete");
-        res.render("index");
+
     });  
 });
 
@@ -145,8 +146,35 @@ app.post("/scrapes/unsave/:id", function (req, res) {
     });
 });
 
-app.post("/clear", function (req,res) {
-    Scrape.find({}).remove()
+app.post("/scrapes/comment/:id", function (req, res) {
+    var newComment = new Comment({
+        comment: req.body.text,
+        user: req.body.user,
+        scrape: req.params.id
+    });
+    console.log(req.body);
+
+    newComment.save(function (err, comment) {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            Scrape.findOneAndUpdate({_id: req.params.id}, {$push: {comment: comment} })
+            .exec(function (err) {
+                if (err) {
+                    console.log(err);
+                    res.send(err);
+                }
+                else {
+                    res.send(comment);
+                }
+            })
+        }
+    })
+});
+
+app.get("/clear", function (req,res) {
+    Scrape.find({saved: false}).remove()
         .exec(function (err, doc) {
             if (err) {
                 console.log(err);
@@ -156,7 +184,7 @@ app.post("/clear", function (req,res) {
                 res.render("index");
             }
         })
-})
+});
 
 
 //Start the app locally
